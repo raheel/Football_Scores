@@ -2,7 +2,9 @@ package barqsoft.footballscores;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
+import android.content.pm.PathPermission;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
@@ -38,6 +40,7 @@ public class ScoresProvider extends ContentProvider
         matcher.addURI(authority, "date" , MATCHES_WITH_DATE);
         return matcher;
     }
+
 
     private int match_uri(Uri uri)
     {

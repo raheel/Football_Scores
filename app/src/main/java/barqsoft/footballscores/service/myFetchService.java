@@ -45,7 +45,7 @@ public class myFetchService extends IntentService
         return;
     }
 
-    public  void getData (String timeFrame)
+    public void getData (String timeFrame)
     {
         System.out.println("myFetchService.getData");
         //Creating fetch URL
@@ -61,6 +61,7 @@ public class myFetchService extends IntentService
         BufferedReader reader = null;
         String JSON_data = null;
         //Opening Connection
+        System.out.println("fetch_build = " + fetch_build);
         try {
             URL fetch = new URL(fetch_build.toString());
             m_connection = (HttpURLConnection) fetch.openConnection();
@@ -88,6 +89,8 @@ public class myFetchService extends IntentService
                 // Stream was empty.  No point in parsing.
                 return;
             }
+
+            System.out.println("buffer = " + buffer);
             JSON_data = buffer.toString();
         }
         catch (Exception e)
@@ -111,6 +114,11 @@ public class myFetchService extends IntentService
             }
         }
         try {
+            System.out.println("JSON_data = " + JSON_data);
+            if (JSON_data == null) {
+                processJSONdata(getString(R.string.dummy_data), getApplicationContext(), false);
+                return;
+            }
             if (JSON_data != null) {
                 //This bit is to check if the data contains any matches. If not, we call processJson on the dummy data
                 JSONArray matches = new JSONObject(JSON_data).getJSONArray("fixtures");
@@ -258,6 +266,7 @@ public class myFetchService extends IntentService
                     //Log.v(LOG_TAG,Home_goals);
                     //Log.v(LOG_TAG,Away_goals);
 
+                    System.out.println("\tadding match_values = " + match_values);
                     values.add(match_values);
                 }
             }

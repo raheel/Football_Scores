@@ -1,11 +1,14 @@
 package barqsoft.footballscores;
 
+import android.content.Context;
+import android.database.Cursor;
+
 import java.util.Locale;
 
 /**
  * Created by yehya khaled on 3/3/2015.
  */
-public class Utilies
+public class Utilities
 {
     public static final int SERIE_A = 357;
     public static final int PREMIER_LEGAUE = 354;
@@ -96,5 +99,10 @@ public class Utilies
         final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
         return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT ||
                 directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
+    }
+
+    public static Cursor getAllMatchesByDate(Context context, String date){
+        return context.getContentResolver().query(DatabaseContract.scores_table.buildScoreWithDate(),
+                null, null, new String[]{date}, null);
     }
 }

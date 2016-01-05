@@ -4,7 +4,7 @@
 
     <uses-permission
         android:name="android.permission.INTERNET"
-        android:maxSdkVersion="22" />
+    />
 
     <application
         android:allowBackup="true"
@@ -37,15 +37,25 @@
 
         <service android:name=".service.myFetchService" />
 
-        <receiver android:name=".widget.ScoresWidgetProvider" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
 
+        <!-- app widget itself -->
+        <receiver
+            android:name="barqsoft.footballscores.widget.WidgetProvider"
+            android:label="@string/app_name" >
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/scores_widget_info" />
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+               </intent-filter>
         </receiver>
+
+        <!-- The service serving the RemoteViews to the collection widget -->
+        <service
+            android:name="barqsoft.footballscores.widget.WidgetService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

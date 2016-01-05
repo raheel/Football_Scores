@@ -1,0 +1,42 @@
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent" android:background="@android:color/holo_blue_light">
+
+
+
+    <TextView
+        android:id="@+id/match_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/previous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Previous" />
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next" />
+
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:id="@+id/score_list"/>
+
+
+
+
+
+
+</LinearLayout>

@@ -33,7 +33,7 @@ public class PagerFragment extends Fragment
         for (int i = 0;i < NUM_PAGES;i++)
         {
             int index = i;
-            if (Utilies.isRTL()){
+            if (Utilities.isRTL()){
                 index = NUM_PAGES - i -1;
             }
 
@@ -71,7 +71,7 @@ public class PagerFragment extends Fragment
         {
             int multiplier = 1;
 
-            if (Utilies.isRTL()){
+            if (Utilities.isRTL()){
                 multiplier = -1;
             }
             return getDayName(getActivity(),System.currentTimeMillis()+((-1* (position-2))*86400000));
