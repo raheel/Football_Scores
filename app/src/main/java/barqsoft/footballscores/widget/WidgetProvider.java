@@ -7,14 +7,18 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.RemoteViews;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import barqsoft.footballscores.R;
+import barqsoft.footballscores.Utilities;
 
 public class WidgetProvider extends AppWidgetProvider {
 
@@ -23,22 +27,15 @@ public class WidgetProvider extends AppWidgetProvider {
 	public static final String PREVIOUS_ACTION = "me.sunphiz.apdapterviewflipperwidget.PREVIOUS";
 	public static final String NEXT_ACTION = "me.sunphiz.apdapterviewflipperwidget.NEXT";
 
-	public WidgetProvider() {
-		System.out.println("____WidgetProvider.WidgetProvider");
-	}
-
-//	private static Map<Integer, Integer> countMap = new HashMap<Integer, Integer>();
 	private static int index = 0;
 
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 			int[] appWidgetIds) {
-		System.out.println("WidgetProvider.onUpdate appWidgetIds: " + Arrays.toString(appWidgetIds));
 		for (int id : appWidgetIds) {
-			System.out.println("id = " + id);
 			RemoteViews rv = new RemoteViews(context.getPackageName(),
 					R.layout.widget_list_view);
-			rv.setTextViewText(R.id.match_date, "Today's date: " + index);
+			rv.setTextViewText(R.id.match_date, "Today");
 
 			// Specify the service to provide data for the collection widget.
 			// Note that we need to
@@ -78,58 +75,47 @@ public class WidgetProvider extends AppWidgetProvider {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		final String action = intent.getAction();
-		System.out.println("WidgetProvider.onReceive " + action);
-		System.out.println("intent.getExtras() = " + intent.getExtras());
-
 
 		RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_list_view);
 
 		if (action.equals(PREVIOUS_ACTION)) {
-			System.out.println("in here");
-			rv.setTextViewText(R.id.match_date, " Yesterday's date: " + index);
-
 			index--;
-
 			if (index <= -2) {
-				System.out.println("7now setting previous invisible...");
-
 				rv.setViewVisibility(R.id.previous, View.INVISIBLE);
 			}
 
 			if (index < 2) {
-				System.out.println("now setting next visible...");
 				rv.setViewVisibility(R.id.next, View.VISIBLE);
 			}
-
-			System.out.println("rv previous= " + index);
 		}
 
 		if (action.equals(NEXT_ACTION)) {
 			index++;
 
 			if (index >= 2) {
-				System.out.println("hiding both 12 buttons");
-				rv.setViewVisibility(R.id.next, View.GONE);
+				rv.setViewVisibility(R.id.next, View.INVISIBLE);
 			}
 
 			if (index > -2) {
 				rv.setViewVisibility(R.id.previous, View.VISIBLE);
 			}
-
-
-			System.out.println("rv next= " + index);
 		}
 
-		System.out.println("_____index: " + index);
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		c.add(Calendar.DATE, index);
+
+		rv.setTextViewText(R.id.match_date, Utilities.getDayName(context, c.getTimeInMillis()));
+
+		int appWidgetId = intent.getIntExtra(
+				AppWidgetManager.EXTRA_APPWIDGET_ID,
+				AppWidgetManager.INVALID_APPWIDGET_ID);
 
 		final Intent scoreIntent = new Intent(context, WidgetService.class);
-		intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-
-
+		scoreIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+		scoreIntent.putExtra("index", index);
+		scoreIntent.setData(Uri.parse(scoreIntent.toUri(Intent.URI_INTENT_SCHEME) + "/" + index));
 		rv.setRemoteAdapter(R.id.score_list, scoreIntent);
-
-//		rv.set
-//		AppWidgetManager.getInstance(context).updateAppWidget(id, rv);
 
 		AppWidgetManager.getInstance(context).updateAppWidget(new ComponentName(context, WidgetProvider.class), rv);
 

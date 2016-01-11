@@ -16,11 +16,6 @@ public class MainActivity extends ActionBarActivity {
     private final String save_tag = "Save Test";
     private PagerFragment my_main;
 
-    public MainActivity() {
-        System.out.println("MainActivity.MainActivity");
-    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //moved call to get data here so that it is called once

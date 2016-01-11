@@ -99,7 +99,6 @@ public class ScoresProvider extends ContentProvider
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder)
     {
-        System.out.println("1sortOrder = " + sortOrder);
         Cursor retCursor;
         //Log.v(FetchScoreTask.LOG_TAG,uri.getPathSegments().toString());
         int match = match_uri(uri);
@@ -127,7 +126,6 @@ public class ScoresProvider extends ContentProvider
         }
         retCursor.setNotificationUri(getContext().getContentResolver(),uri);
         //System.out.println("1cursor= " + DatabaseUtils.dumpCursorToString(retCursor));
-        System.out.println("retCursor = " + retCursor.getCount());
         return retCursor;
     }
 

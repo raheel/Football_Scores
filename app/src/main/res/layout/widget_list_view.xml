@@ -1,7 +1,7 @@
 <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
 android:orientation="vertical"
     android:layout_height="match_parent"
-    android:layout_width="match_parent" android:background="@android:color/holo_blue_light">
+    android:layout_width="match_parent" android:background="@color/green13">
 
 
 
@@ -9,12 +9,17 @@ android:orientation="vertical"
         android:id="@+id/match_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:textSize="32dp"
+        android:textAlignment="center"
+        />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        >
 
         <Button
             android:id="@+id/previous"
@@ -33,10 +38,5 @@ android:orientation="vertical"
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content" android:id="@+id/score_list"/>
-
-
-
-
-
 
 </LinearLayout>

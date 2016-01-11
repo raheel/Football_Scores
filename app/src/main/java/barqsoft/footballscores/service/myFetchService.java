@@ -47,7 +47,6 @@ public class myFetchService extends IntentService
 
     public void getData (String timeFrame)
     {
-        System.out.println("myFetchService.getData");
         //Creating fetch URL
         final String BASE_URL = "http://api.football-data.org/alpha/fixtures"; //Base URL
         final String QUERY_TIME_FRAME = "timeFrame"; //Time Frame parameter to determine days
@@ -61,7 +60,6 @@ public class myFetchService extends IntentService
         BufferedReader reader = null;
         String JSON_data = null;
         //Opening Connection
-        System.out.println("fetch_build = " + fetch_build);
         try {
             URL fetch = new URL(fetch_build.toString());
             m_connection = (HttpURLConnection) fetch.openConnection();
@@ -90,7 +88,6 @@ public class myFetchService extends IntentService
                 return;
             }
 
-            System.out.println("buffer = " + buffer);
             JSON_data = buffer.toString();
         }
         catch (Exception e)
@@ -114,7 +111,6 @@ public class myFetchService extends IntentService
             }
         }
         try {
-            System.out.println("JSON_data = " + JSON_data);
             if (JSON_data == null) {
                 processJSONdata(getString(R.string.dummy_data), getApplicationContext(), false);
                 return;
@@ -266,7 +262,6 @@ public class myFetchService extends IntentService
                     //Log.v(LOG_TAG,Home_goals);
                     //Log.v(LOG_TAG,Away_goals);
 
-                    System.out.println("\tadding match_values = " + match_values);
                     values.add(match_values);
                 }
             }

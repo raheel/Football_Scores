@@ -14,7 +14,9 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import barqsoft.footballscores.DatabaseContract;
 import barqsoft.footballscores.MainScreenFragment;
@@ -27,18 +29,27 @@ import barqsoft.footballscores.service.myFetchService;
 
 public class WidgetService extends RemoteViewsService {
 
+	private Map<Integer, List<Match>> matchesMap = null;
+
 	private static final String TAG = WidgetService.class
 			.getSimpleName();
 
 
 	@Override
 	public RemoteViewsFactory onGetViewFactory(Intent intent) {
+		int index = intent.getIntExtra("index", 0);
+
 			Log.d(TAG, "onGetViewFactory()");
+
+		if (matchesMap==null) {
+			matchesMap = new HashMap<Integer, List<Match>>();
 			myFetchService service = new myFetchService();
 			service.getData("n2");
 			service.getData("p2");
-
-			for (int i=0; i<5; i++) {
+			System.out.println("widgetservice ****Done***");
+			for (int i = 0; i < 5; i++) {
+				List<Match> matches = new ArrayList<Match>();
+				matchesMap.put(i - 2, matches);
 				Date date = new Date(System.currentTimeMillis() + ((i - 2) * 86400000));
 				SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -51,26 +62,27 @@ public class WidgetService extends RemoteViewsService {
 
 				System.out.println("_cursor = " + cursor);
 
-				if (cursor!=null){
+				if (cursor != null) {
 					if (cursor.moveToFirst()) {
 						do {
-							String teams  = cursor.getString(scoresAdapter.COL_HOME) + " vs " + cursor.getString(scoresAdapter.COL_AWAY) ;
-							System.out.println("\tteams	 = " + teams);
+							String teams = cursor.getString(scoresAdapter.COL_HOME) + " vs " + cursor.getString(scoresAdapter.COL_AWAY);
+							System.out.println("\t" + fragmentdate + " - teams	 = " + teams);
 							String matchDate = cursor.getString(scoresAdapter.COL_DATE);
 							System.out.println("matchDate = " + matchDate);
-							String score = Utilities.getScores(cursor.getInt(scoresAdapter.COL_HOME_GOALS),cursor.getInt(scoresAdapter.COL_AWAY_GOALS));
+							String score = Utilities.getScores(cursor.getInt(scoresAdapter.COL_HOME_GOALS), cursor.getInt(scoresAdapter.COL_AWAY_GOALS));
 							System.out.println("score = " + score);
 							System.out.println("\n");
+
+							matches.add(new Match(teams, score));
 						} while (cursor.moveToNext());
 					}
 					cursor.close();
 				}
 
-
 			}
-
-		List<Match> matches = new ArrayList<Match>();
-		return new MatchViewFactory(getApplicationContext(), matches);
+		}
+		System.out.println(index + " - size = " + matchesMap.get(index).size());
+		return new MatchViewFactory(getApplicationContext(), matchesMap.get(index));
 	}
 
 	private static class ViewHolder {
@@ -104,29 +116,19 @@ public class WidgetService extends RemoteViewsService {
 
 		@Override
 		public int getCount() {
-			return 5;
+			return matches.size();
 		}
 
-		int i = 1;
 		@Override
 		public RemoteViews getViewAt(int position) {
-			System.out.println("MatchViewFactory.getViewAt " + position );
-//			RemoteViews parent = new RemoteViews(context.getPackageName(), R.layout.list_view);
-//			parent.setTextViewText(R.id.match_date, "Today's Date " + position);
-////			for (int i=0; i<getCount(); i++) {
-////				System.out.println("\ti = " + i);
-////				RemoteViews row = new RemoteViews(context.getPackageName(), R.layout.scores);
-////				row.setTextViewText(R.id.match_teams, matches.get(position).getTeams());
-////				row.setTextViewText(R.id.match_score, matches.get(position).getScore());
-////				parent.addView(R.layout.scores, row);
-////			}
-//			return parent;
-
 			RemoteViews row = new RemoteViews(context.getPackageName(), R.layout.scores);
 
-			if (i < matches.size()) {
-				row.setTextViewText(R.id.match_teams, matches.get(position).getTeams() + " " + i++);
-				row.setTextViewText(R.id.match_score, matches.get(position).getScore() + " " + i++);
+			if (position < matches.size()) {
+				try {
+					row.setTextViewText(R.id.match_teams, matches.get(position).getTeams() + ": " + matches.get(position).getScore());
+				} catch (Exception e) {
+					System.out.println("e.getMessage() = " + e.getMessage());
+				}
 			}
 			return row;
 		}
