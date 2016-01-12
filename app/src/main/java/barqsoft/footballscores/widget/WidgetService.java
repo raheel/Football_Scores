@@ -46,7 +46,6 @@ public class WidgetService extends RemoteViewsService {
 			myFetchService service = new myFetchService();
 			service.getData("n2");
 			service.getData("p2");
-			System.out.println("widgetservice ****Done***");
 			for (int i = 0; i < 5; i++) {
 				List<Match> matches = new ArrayList<Match>();
 				matchesMap.put(i - 2, matches);
@@ -55,24 +54,13 @@ public class WidgetService extends RemoteViewsService {
 
 				String fragmentdate = mformat.format(date);
 
-				//fragmentdate = "2015-12-" + (10 + i);
-
-				System.out.println("fragmentdate = " + fragmentdate);
 				Cursor cursor = Utilities.getAllMatchesByDate(getApplicationContext(), fragmentdate);
-
-				System.out.println("_cursor = " + cursor);
 
 				if (cursor != null) {
 					if (cursor.moveToFirst()) {
 						do {
 							String teams = cursor.getString(scoresAdapter.COL_HOME) + " vs " + cursor.getString(scoresAdapter.COL_AWAY);
-							System.out.println("\t" + fragmentdate + " - teams	 = " + teams);
-							String matchDate = cursor.getString(scoresAdapter.COL_DATE);
-							System.out.println("matchDate = " + matchDate);
 							String score = Utilities.getScores(cursor.getInt(scoresAdapter.COL_HOME_GOALS), cursor.getInt(scoresAdapter.COL_AWAY_GOALS));
-							System.out.println("score = " + score);
-							System.out.println("\n");
-
 							matches.add(new Match(teams, score));
 						} while (cursor.moveToNext());
 					}
@@ -81,7 +69,6 @@ public class WidgetService extends RemoteViewsService {
 
 			}
 		}
-		System.out.println(index + " - size = " + matchesMap.get(index).size());
 		return new MatchViewFactory(getApplicationContext(), matchesMap.get(index));
 	}
 
