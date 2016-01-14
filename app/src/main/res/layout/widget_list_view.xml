@@ -25,16 +25,16 @@ android:orientation="vertical"
             android:id="@+id/previous"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Previous"
-            android:contentDescription="Previous"
+            android:text="@string/previous"
+            android:contentDescription="@string/previous"
             />
 
         <Button
             android:id="@+id/next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Next"
-            android:contentDescription="Next"
+            android:text="@string/next"
+            android:contentDescription="@string/next"
             />
 
     </LinearLayout>
